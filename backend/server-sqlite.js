@@ -21,7 +21,12 @@ app.use('/api/', limiter);
 // CORS
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://admin.timesheet.com', 'https://company.timesheet.com', 'https://employee.timesheet.com']
+    ? [
+        'https://fratria-servizi.github.io',
+        'https://admin.timesheet.com', 
+        'https://company.timesheet.com', 
+        'https://employee.timesheet.com'
+      ]
     : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
   credentials: true
 }));

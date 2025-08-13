@@ -52,6 +52,8 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(API_ENDPOINTS.ADMIN_LOGIN, {
         username,
         password
+      }, {
+        timeout: 10000 // 10 secondi di timeout
       });
 
       console.log('Risposta login:', response.data);
