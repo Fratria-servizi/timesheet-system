@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy-admin:
+  deploy-all-apps:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -19,94 +19,62 @@ jobs:
       with:
         node-version: '18'
         
-    - name: Debug - List files
-      run: |
-        echo "Current directory: $(pwd)"
-        echo "Listing files:"
-        ls -la
-        echo "Listing frontend directory:"
-        ls -la frontend/
-        echo "Listing admin-app directory:"
-        ls -la frontend/admin-app/
-        
-    - name: Install dependencies
+    # Deploy Admin App
+    - name: Install Admin dependencies
       working-directory: ./frontend/admin-app
-      run: |
-        echo "Installing dependencies in $(pwd)"
-        npm ci --verbose
+      run: npm ci
         
-    - name: Build app
+    - name: Build Admin app
       working-directory: ./frontend/admin-app
-      run: |
-        echo "Building app in $(pwd)"
-        npm run build
-        echo "Build completed. Listing build directory:"
-        ls -la build/
+      run: npm run build
       env:
         CI: false
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
-    - name: Deploy to GitHub Pages
+    - name: Deploy Admin to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./frontend/admin-app/build
         destination_dir: admin
-
-  deploy-company:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
+        force_orphan: true
         
-    - name: Install dependencies
+    # Deploy Company App
+    - name: Install Company dependencies
       working-directory: ./frontend/company-app
       run: npm ci
       
-    - name: Build app
+    - name: Build Company app
       working-directory: ./frontend/company-app
       run: npm run build
       env:
         CI: false
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
-    - name: Deploy to GitHub Pages
+    - name: Deploy Company to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./frontend/company-app/build
         destination_dir: company
-
-  deploy-employee:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
+        force_orphan: false
         
-    - name: Install dependencies
+    # Deploy Employee App
+    - name: Install Employee dependencies
       working-directory: ./frontend/employee-app
       run: npm ci
       
-    - name: Build app
+    - name: Build Employee app
       working-directory: ./frontend/employee-app
       run: npm run build
       env:
         CI: false
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
-    - name: Deploy to GitHub Pages
+    - name: Deploy Employee to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./frontend/employee-app/build
-        destination_dir: employee 
+        destination_dir: employee
+        force_orphan: false 
