@@ -1,0 +1,99 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches: [ deployment ]
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-admin:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/admin-app/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./frontend/admin-app
+      run: npm ci
+      
+    - name: Build app
+      working-directory: ./frontend/admin-app
+      run: npm run build
+      env:
+        REACT_APP_API_URL: ${{ secrets.BACKEND_URL }}
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/admin-app/build
+        destination_dir: admin
+
+  deploy-company:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/company-app/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./frontend/company-app
+      run: npm ci
+      
+    - name: Build app
+      working-directory: ./frontend/company-app
+      run: npm run build
+      env:
+        REACT_APP_API_URL: ${{ secrets.BACKEND_URL }}
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/company-app/build
+        destination_dir: company
+
+  deploy-employee:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: frontend/employee-app/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./frontend/employee-app
+      run: npm ci
+      
+    - name: Build app
+      working-directory: ./frontend/employee-app
+      run: npm run build
+      env:
+        REACT_APP_API_URL: ${{ secrets.BACKEND_URL }}
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./frontend/employee-app/build
+        destination_dir: employee 

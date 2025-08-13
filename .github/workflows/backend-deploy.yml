@@ -1,0 +1,38 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches: [ deployment ]
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: backend/package-lock.json
+        
+    - name: Install dependencies
+      working-directory: ./backend
+      run: npm ci
+      
+    - name: Run tests
+      working-directory: ./backend
+      run: npm test
+      
+    - name: Deploy to Render
+      uses: johnbeynon/render-deploy-action@v1.0.0
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        working-directory: ./backend 
