@@ -4,7 +4,7 @@
   "description": "Backend API per sistema timesheet integrato",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server-sqlite.js",
     "dev": "nodemon server.js",
     "sqlite": "node server-sqlite.js",
     "dev-sqlite": "nodemon server-sqlite.js",
