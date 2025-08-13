@@ -91,10 +91,16 @@ async function initializeDatabase() {
       `, ['aziendaesempio', 'admin@aziendaesempio.it', 'company123', 'company']);
       
       // Inserisci dipendenti di esempio
-      await db.run(`
+      const employeeResult = await db.run(`
         INSERT INTO employees (company_id, employee_code, first_name, last_name, email, position, department) 
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `, [companyResult.id, 'EMP001', 'Mario', 'Rossi', 'mario.rossi@timesheet.com', 'Sviluppatore', 'IT']);
+      
+      // Inserisci utente employee
+      await db.run(`
+        INSERT INTO users (username, email, password_hash, role) 
+        VALUES (?, ?, ?, ?)
+      `, ['emp001', 'mario.rossi@timesheet.com', 'password123', 'employee']);
       
       console.log('✅ Azienda e dipendenti di esempio creati');
     }
