@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/auth/verify');
+      const response = await axios.get(API_ENDPOINTS.VERIFY_TOKEN);
       if (response.data.valid) {
         setUser(response.data.user);
         setIsAuthenticated(true);
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('Tentativo di login per:', username);
       
-      const response = await axios.post('http://localhost:5001/api/auth/admin/login', {
+      const response = await axios.post(API_ENDPOINTS.ADMIN_LOGIN, {
         username,
         password
       });
