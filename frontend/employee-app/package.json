@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "App dipendente per sistema timesheet",
   "private": true,
+  "homepage": "https://fratria-servizi.github.io/timesheet-system/employee",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
