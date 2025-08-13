@@ -27,6 +27,7 @@ import {
 } from '@mui/material';
 import { Add, Edit, Delete } from '@mui/icons-material';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 const LeaveRequests = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -51,7 +52,7 @@ const LeaveRequests = () => {
   const loadLeaveRequests = async () => {
     try {
       const token = localStorage.getItem('employeeToken');
-      const response = await axios.get('http://localhost:5001/api/employee/leave-requests', {
+      const response = await axios.get(API_ENDPOINTS.LEAVE_REQUESTS, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -116,7 +117,7 @@ const LeaveRequests = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('employeeToken');
-      const response = await axios.post('http://localhost:5001/api/employee/leave-request', formData, {
+      const response = await axios.post(API_ENDPOINTS.CREATE_LEAVE_REQUEST, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

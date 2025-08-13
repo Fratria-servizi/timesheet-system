@@ -26,6 +26,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 const TimeTracking = () => {
   const { user } = useAuth();
@@ -50,7 +51,7 @@ const TimeTracking = () => {
   const loadTimeRecords = async () => {
     try {
       const token = localStorage.getItem('employeeToken');
-      const response = await axios.get('http://localhost:5001/api/employee/time-records', {
+      const response = await axios.get(API_ENDPOINTS.TIME_RECORDS, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -65,7 +66,7 @@ const TimeTracking = () => {
   const loadCurrentStatus = async () => {
     try {
       const token = localStorage.getItem('employeeToken');
-      const response = await axios.get('http://localhost:5001/api/employee/dashboard', {
+      const response = await axios.get(API_ENDPOINTS.DASHBOARD, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -81,7 +82,7 @@ const TimeTracking = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('employeeToken');
-      const response = await axios.post('http://localhost:5001/api/employee/time-entry', {
+      const response = await axios.post(API_ENDPOINTS.TIME_ENTRY, {
         action
       }, {
         headers: { Authorization: `Bearer ${token}` }
