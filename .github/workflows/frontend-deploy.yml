@@ -29,7 +29,7 @@ jobs:
       working-directory: ./frontend/admin-app
       run: npm run build
       env:
-        REACT_APP_API_URL: ${{ secrets.BACKEND_URL }}
+        REACT_APP_API_URL: https://timesheet-system.onrender.com
         
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
@@ -59,7 +59,7 @@ jobs:
       working-directory: ./frontend/company-app
       run: npm run build
       env:
-        REACT_APP_API_URL: ${{ secrets.BACKEND_URL }}
+        REACT_APP_API_URL: https://timesheet-system.onrender.com
         
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
@@ -89,7 +89,7 @@ jobs:
       working-directory: ./frontend/employee-app
       run: npm run build
       env:
-        REACT_APP_API_URL: ${{ secrets.BACKEND_URL }}
+        REACT_APP_API_URL: https://timesheet-system.onrender.com
         
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3

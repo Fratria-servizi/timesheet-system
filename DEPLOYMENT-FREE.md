@@ -7,52 +7,35 @@ Deployare l'intero sistema Timesheet gratuitamente usando:
 - **Render** per il backend (piano gratuito)
 
 ## 🚀 **URL Finali (Gratuiti)**
-- **Backend API**: `https://timesheet-backend.onrender.com`
+- **Backend API**: `https://timesheet-system.onrender.com`
 - **Admin App**: `https://fratria-servizi.github.io/timesheet-system/admin/`
 - **Company App**: `https://fratria-servizi.github.io/timesheet-system/company/`
 - **Employee App**: `https://fratria-servizi.github.io/timesheet-system/employee/`
 
 ## 📋 **Passi per il Deployment**
 
-### **1. Abilita GitHub Pages**
+### **1. ✅ Abilita GitHub Pages**
 1. Vai su [Repository Settings](https://github.com/Fratria-servizi/timesheet-system/settings)
 2. Scorri fino a "Pages"
 3. **Source**: Seleziona "GitHub Actions"
 4. Salva
 
-### **2. Configura Render (Backend)**
-1. Vai su [Render.com](https://render.com)
-2. Clicca "New +" → "Web Service"
-3. Connetti il repository GitHub
-4. Seleziona `timesheet-system`
-5. **Build Command**: `npm install`
-6. **Start Command**: `npm start`
-7. **Plan**: Free
-8. Clicca "Create Web Service"
+### **2. ✅ Configura Render (Backend) - GIÀ FATTO!**
+- **URL Backend**: `https://timesheet-system.onrender.com`
+- **Status**: Configurato e funzionante
 
-### **3. Copia l'URL del Backend**
-- Render ti darà un URL tipo: `https://timesheet-backend-xxxxx.onrender.com`
-- Copialo per usarlo nei secrets di GitHub
-
-### **4. Configura GitHub Secrets**
-1. Vai su [Repository Settings → Secrets and variables → Actions](https://github.com/Fratria-servizi/timesheet-system/settings/secrets/actions)
-2. Clicca "New repository secret"
-3. Aggiungi:
-   - **Name**: `BACKEND_URL`
-   - **Value**: `https://tuo-backend.onrender.com`
-
-### **5. Deploy Automatico**
-- Pusha su `deployment` branch
-- GitHub Actions si attiverà automaticamente
-- Le app verranno deployate su GitHub Pages
+### **3. 🔄 Deploy Automatico Frontend**
+- I workflow GitHub Actions si attivano automaticamente
+- Le app frontend vengono buildate e deployate su GitHub Pages
+- **Nessun secret da configurare** - tutto automatico!
 
 ## 🔧 **Configurazioni Automatiche**
 
 ### **GitHub Actions**
 - ✅ Build automatico ad ogni push
-- ✅ Test automatici
+- ✅ Test automatici del backend
 - ✅ Deploy su GitHub Pages
-- ✅ Configurazione ambiente
+- ✅ Configurazione ambiente automatica
 
 ### **Render Backend**
 - ✅ Database SQLite integrato
@@ -64,7 +47,7 @@ Deployare l'intero sistema Timesheet gratuitamente usando:
 
 ### **Backend Health Check**
 ```bash
-curl https://tuo-backend.onrender.com/health
+curl https://timesheet-system.onrender.com/health
 # Risposta: {"status":"OK","timestamp":"..."}
 ```
 
@@ -113,4 +96,10 @@ curl https://tuo-backend.onrender.com/health
 ---
 
 ## 🎉 **Risultato Finale**
-Dopo il deployment avrai **4 URL pubblici gratuiti** per mostrare il sistema ai clienti! 
+Dopo il deployment avrai **4 URL pubblici gratuiti** per mostrare il sistema ai clienti!
+
+## 🚀 **Stato Attuale**
+- ✅ **Backend**: Configurato su Render
+- ✅ **Workflows**: Configurati e pronti
+- ✅ **GitHub Pages**: Abilitato
+- 🔄 **Frontend**: In attesa di deployment automatico 

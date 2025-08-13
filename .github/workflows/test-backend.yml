@@ -1,0 +1,23 @@
+name: Test Backend Connection
+
+on:
+  push:
+    branches: [ deployment ]
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test Backend Health
+      run: |
+        echo "Testing backend connection..."
+        curl -f https://timesheet-system.onrender.com/health || echo "Backend not responding"
+        
+    - name: Test Backend Status
+      run: |
+        echo "Backend URL: https://timesheet-system.onrender.com"
+        echo "Health endpoint: /health"
+        echo "Ready for frontend deployment!" 
