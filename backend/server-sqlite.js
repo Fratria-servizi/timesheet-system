@@ -7,6 +7,101 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// Inizializzazione automatica del database
+async function initializeDatabase() {
+  try {
+    console.log('🚀 Inizializzazione database SQLite...');
+    const db = require('./config/sqlite');
+    
+    // Crea tabelle se non esistono
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL,
+        role TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE TABLE IF NOT EXISTS companies (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        address TEXT,
+        phone TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE TABLE IF NOT EXISTS employees (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        company_id INTEGER NOT NULL,
+        employee_code TEXT UNIQUE NOT NULL,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        position TEXT,
+        department TEXT,
+        hire_date DATE,
+        status TEXT DEFAULT 'active',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (company_id) REFERENCES companies (id)
+      );
+      
+      CREATE TABLE IF NOT EXISTS time_records (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        employee_id INTEGER NOT NULL,
+        record_date DATE NOT NULL,
+        record_type TEXT NOT NULL,
+        time_value TIME NOT NULL,
+        notes TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (employee_id) REFERENCES employees (id)
+      );
+    `);
+    
+    // Inserisci utente admin se non esiste
+    const adminExists = await db.get('SELECT id FROM users WHERE username = ?', ['admin']);
+    if (!adminExists) {
+      await db.run(`
+        INSERT INTO users (username, email, password_hash, role) 
+        VALUES (?, ?, ?, ?)
+      `, ['admin', 'admin@timesheet.com', 'admin123', 'admin']);
+      console.log('✅ Utente admin creato');
+    }
+    
+    // Inserisci azienda di esempio se non esiste
+    const companyExists = await db.get('SELECT id FROM companies WHERE email = ?', ['admin@aziendaesempio.it']);
+    if (!companyExists) {
+      const companyResult = await db.run(`
+        INSERT INTO companies (name, email, address, phone) 
+        VALUES (?, ?, ?, ?)
+      `, ['Azienda Esempio', 'admin@aziendaesempio.it', 'Via Roma 123, Milano', '+39 02 1234567']);
+      
+      // Inserisci utente azienda
+      await db.run(`
+        INSERT INTO users (username, email, password_hash, role) 
+        VALUES (?, ?, ?, ?)
+      `, ['aziendaesempio', 'admin@aziendaesempio.it', 'company123', 'company']);
+      
+      // Inserisci dipendenti di esempio
+      await db.run(`
+        INSERT INTO employees (company_id, employee_code, first_name, last_name, email, position, department) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `, [companyResult.lastID, 'EMP001', 'Mario', 'Rossi', 'mario.rossi@timesheet.com', 'Sviluppatore', 'IT']);
+      
+      console.log('✅ Azienda e dipendenti di esempio creati');
+    }
+    
+    console.log('🎉 Database SQLite inizializzato con successo!');
+  } catch (error) {
+    console.error('❌ Errore durante l\'inizializzazione del database:', error);
+  }
+}
+
+// Inizializza il database all'avvio
+initializeDatabase();
+
 // Middleware di sicurezza
 app.use(helmet());
 
@@ -37,10 +132,15 @@ app.get('/health', (req, res) => {
 app.get('/api/test', async (req, res) => {
   try {
     const db = require('./config/sqlite');
-    const users = await db.query('SELECT COUNT(*) as count FROM users');
+    const users = await db.get('SELECT COUNT(*) as count FROM users');
+    const companies = await db.get('SELECT COUNT(*) as count FROM companies');
+    const employees = await db.get('SELECT COUNT(*) as count FROM employees');
+    
     res.json({ 
       message: 'Database SQLite funziona!', 
-      usersCount: users[0].count,
+      usersCount: users.count,
+      companiesCount: companies.count,
+      employeesCount: employees.count,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
