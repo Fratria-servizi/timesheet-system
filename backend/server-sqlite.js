@@ -14,7 +14,7 @@ async function initializeDatabase() {
     const db = require('./config/sqlite');
     
     // Crea tabelle se non esistono
-    await db.exec(`
+    await db.run(`
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -22,8 +22,10 @@ async function initializeDatabase() {
         password_hash TEXT NOT NULL,
         role TEXT NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      );
-      
+      )
+    `);
+    
+    await db.run(`
       CREATE TABLE IF NOT EXISTS companies (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -31,8 +33,10 @@ async function initializeDatabase() {
         address TEXT,
         phone TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      );
-      
+      )
+    `);
+    
+    await db.run(`
       CREATE TABLE IF NOT EXISTS employees (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         company_id INTEGER NOT NULL,
@@ -46,8 +50,10 @@ async function initializeDatabase() {
         status TEXT DEFAULT 'active',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (company_id) REFERENCES companies (id)
-      );
-      
+      )
+    `);
+    
+    await db.run(`
       CREATE TABLE IF NOT EXISTS time_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         employee_id INTEGER NOT NULL,
@@ -57,7 +63,7 @@ async function initializeDatabase() {
         notes TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (employee_id) REFERENCES employees (id)
-      );
+      )
     `);
     
     // Inserisci utente admin se non esiste
@@ -88,7 +94,7 @@ async function initializeDatabase() {
       await db.run(`
         INSERT INTO employees (company_id, employee_code, first_name, last_name, email, position, department) 
         VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, [companyResult.lastID, 'EMP001', 'Mario', 'Rossi', 'mario.rossi@timesheet.com', 'Sviluppatore', 'IT']);
+      `, [companyResult.id, 'EMP001', 'Mario', 'Rossi', 'mario.rossi@timesheet.com', 'Sviluppatore', 'IT']);
       
       console.log('✅ Azienda e dipendenti di esempio creati');
     }
@@ -145,6 +151,18 @@ app.get('/api/test', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: 'Errore database', details: error.message });
+  }
+});
+
+// Endpoint per forzare l'inizializzazione del database
+app.post('/api/init-db', async (req, res) => {
+  try {
+    console.log('🔄 Inizializzazione database forzata...');
+    await initializeDatabase();
+    res.json({ message: 'Database inizializzato con successo' });
+  } catch (error) {
+    console.error('❌ Errore inizializzazione forzata:', error);
+    res.status(500).json({ error: 'Errore inizializzazione', details: error.message });
   }
 });
 
