@@ -1,0 +1,17 @@
+[build]
+  publish = "."
+  command = "npm install"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[context.deploy-preview]
+  command = "npm install"
+
+[context.branch-deploy]
+  command = "npm install" 

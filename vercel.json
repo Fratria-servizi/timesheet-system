@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/admin-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    },
+    {
+      "src": "frontend/company-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    },
+    {
+      "src": "frontend/employee-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/admin/(.*)",
+      "dest": "/frontend/admin-app/build/$1"
+    },
+    {
+      "src": "/company/(.*)",
+      "dest": "/frontend/company-app/build/$1"
+    },
+    {
+      "src": "/employee/(.*)",
+      "dest": "/frontend/employee-app/build/$1"
+    }
+  ]
+} 
