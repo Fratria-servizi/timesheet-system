@@ -43,6 +43,7 @@ jobs:
         echo "Build completed. Listing build directory:"
         ls -la build/
       env:
+        CI: false
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
     - name: Deploy to GitHub Pages
@@ -71,6 +72,7 @@ jobs:
       working-directory: ./frontend/company-app
       run: npm run build
       env:
+        CI: false
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
     - name: Deploy to GitHub Pages
@@ -99,6 +101,7 @@ jobs:
       working-directory: ./frontend/employee-app
       run: npm run build
       env:
+        CI: false
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
     - name: Deploy to GitHub Pages
