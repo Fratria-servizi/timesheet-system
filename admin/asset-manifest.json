@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/timesheet-system/admin/static/js/main.30197bc0.js",
+    "index.html": "/timesheet-system/admin/index.html",
+    "main.30197bc0.js.map": "/timesheet-system/admin/static/js/main.30197bc0.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.30197bc0.js"
+  ]
+}
