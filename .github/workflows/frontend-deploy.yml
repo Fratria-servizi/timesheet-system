@@ -18,16 +18,30 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: frontend/admin-app/package-lock.json
+        
+    - name: Debug - List files
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Listing files:"
+        ls -la
+        echo "Listing frontend directory:"
+        ls -la frontend/
+        echo "Listing admin-app directory:"
+        ls -la frontend/admin-app/
         
     - name: Install dependencies
       working-directory: ./frontend/admin-app
-      run: npm ci
-      
+      run: |
+        echo "Installing dependencies in $(pwd)"
+        npm ci --verbose
+        
     - name: Build app
       working-directory: ./frontend/admin-app
-      run: npm run build
+      run: |
+        echo "Building app in $(pwd)"
+        npm run build
+        echo "Build completed. Listing build directory:"
+        ls -la build/
       env:
         REACT_APP_API_URL: https://timesheet-system.onrender.com
         
@@ -48,8 +62,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: frontend/company-app/package-lock.json
         
     - name: Install dependencies
       working-directory: ./frontend/company-app
@@ -78,8 +90,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: frontend/employee-app/package-lock.json
         
     - name: Install dependencies
       working-directory: ./frontend/employee-app
